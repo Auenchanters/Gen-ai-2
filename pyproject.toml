@@ -1,0 +1,86 @@
+[project]
+name = "gridpulse"
+version = "0.1.0"
+description = "Accelerated energy demand & peak-risk decision intelligence (Google Cloud + NVIDIA RAPIDS)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "GridPulse contributors" }]
+keywords = [
+    "energy",
+    "demand-forecasting",
+    "rapids",
+    "cudf",
+    "bigquery",
+    "vertex-ai",
+    "decision-intelligence",
+]
+dependencies = [
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "pyarrow>=18.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "pandas-stubs>=2.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pipeline"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["."]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "PTH", "RUF", "ARG", "TID", "D"]
+# D203/D213 conflict with D211/D212 (google convention picks the latter); D104/D107
+# silence package- and __init__-docstring noise.
+ignore = ["D104", "D107", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "ARG"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+# pandas operations frequently return Any even with stubs; keep the rest of strict.
+module = "pipeline.*"
+warn_return_any = false
+
+[[tool.mypy.overrides]]
+# RAPIDS is only installed in the GPU environment; no stubs available.
+module = ["cudf", "cudf.pandas"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--cov=pipeline --cov-report=term-missing --cov-fail-under=85"
+
+[tool.coverage.run]
+branch = true
+source = ["pipeline"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]
