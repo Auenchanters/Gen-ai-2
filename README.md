@@ -80,6 +80,7 @@ uv sync --extra dev                                                # Python 3.11
 uv run python -m pipeline.generate_data --days 14 --meters-per-zone 300  # -> data/*.parquet
 uv run python -m pipeline.accelerate                               # -> data/zone_features.parquet
 uv run python -m pipeline.train                                    # -> data/forecast.parquet
+uv run uvicorn server.main:app --port 8080                        # API at localhost:8080
 uv run python -m pipeline.benchmark --meters-per-zone 500 --days 14  # CPU baseline
 uv run pytest                                                      # tests + coverage gate
 ```

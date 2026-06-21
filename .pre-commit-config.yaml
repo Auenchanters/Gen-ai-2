@@ -19,6 +19,6 @@ repos:
     hooks:
       - id: mypy
         name: mypy (strict)
-        entry: uv run mypy pipeline tests
+        entry: uv run mypy pipeline server tests
         language: system
         pass_filenames: false

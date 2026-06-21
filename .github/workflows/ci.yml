@@ -26,6 +26,6 @@ jobs:
       - name: Format check (ruff)
         run: uv run ruff format --check .
       - name: Type check (mypy strict)
-        run: uv run mypy pipeline tests
+        run: uv run mypy pipeline server tests
       - name: Test (pytest + coverage gate)
         run: uv run pytest

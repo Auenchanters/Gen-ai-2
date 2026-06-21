@@ -20,15 +20,26 @@ dependencies = [
     "pandas>=2.2",
     "pyarrow>=18.0",
     "xgboost>=2.1",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
 ]
 
 [project.optional-dependencies]
+cloud = [
+    "google-cloud-bigquery>=3.25",
+    "db-dtypes>=1.3",
+    "google-genai>=0.8",
+]
 dev = [
     "ruff>=0.8",
     "mypy>=1.13",
     "pytest>=8.3",
     "pytest-cov>=6.0",
     "pandas-stubs>=2.2",
+    "httpx>=0.27",
+    "httpx2",
 ]
 
 [build-system]
@@ -36,7 +47,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["pipeline"]
+packages = ["pipeline", "server"]
 
 [tool.ruff]
 line-length = 100
@@ -56,6 +67,10 @@ ignore = ["D104", "D107", "D203", "D213"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI intentionally uses callables (Depends/Query) in argument defaults.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true
@@ -68,22 +83,22 @@ disallow_untyped_calls = false
 
 [[tool.mypy.overrides]]
 # pandas operations frequently return Any even with stubs; keep the rest of strict.
-module = "pipeline.*"
+module = ["pipeline.*", "server.domain", "server.repository", "server.bigquery_repo"]
 warn_return_any = false
 
 [[tool.mypy.overrides]]
-# RAPIDS is GPU-only (no stubs); xgboost ships no type stubs.
-module = ["cudf", "cudf.pandas", "xgboost"]
+# Optional/GPU-only deps without type stubs in the dev environment.
+module = ["cudf", "cudf.pandas", "xgboost", "google", "google.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-addopts = "--cov=pipeline --cov-report=term-missing --cov-fail-under=85"
+addopts = "--cov=pipeline --cov=server --cov-report=term-missing --cov-fail-under=85"
 
 [tool.coverage.run]
 branch = true
-source = ["pipeline"]
+source = ["pipeline", "server"]
 
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]
