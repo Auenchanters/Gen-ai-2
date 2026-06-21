@@ -35,11 +35,17 @@ All notable changes to this project are documented here. The format follows
   - Gemini-backed natural-language answers (`USE_GEMINI`) with a deterministic,
     data-grounded rules fallback; every answer source-tagged.
   - Typed Pydantic request/response models with input bounds.
-- Unit + integration tests across pipeline and server (44 tests, ~99% coverage).
+- Frontend (`web/`): accessible React + TypeScript dashboard (Vite) — risk ranking,
+  demand-vs-capacity forecast chart, alerts, and a natural-language ask box. Every chart
+  has a data-table equivalent; types mirror the backend schemas.
+- Unit + integration tests across pipeline, server, and web (49 tests: 44 backend +
+  5 frontend, with Vitest + axe-core a11y assertions).
 
 ### Changed
 
 - Added `xgboost`, `fastapi`, `uvicorn`, `pydantic`, `pydantic-settings` dependencies and
   an optional `cloud` extra (BigQuery + google-genai). Notebooks excluded from ruff.
+- Added a second CI job for the frontend (ESLint + jsx-a11y, strict tsc, Vitest coverage,
+  production build).
 
 [Unreleased]: https://github.com/Auenchanters/Gen-ai-2

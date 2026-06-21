@@ -85,6 +85,15 @@ uv run python -m pipeline.benchmark --meters-per-zone 500 --days 14  # CPU basel
 uv run pytest                                                      # tests + coverage gate
 ```
 
+The dashboard lives in [web/](web/) (React + TypeScript, Vite):
+
+```bash
+npm --prefix web install
+npm --prefix web run dev      # http://localhost:5173 (proxies /api to the backend on :8080)
+npm --prefix web test         # Vitest + axe-core a11y tests
+npm --prefix web run build    # type-check + build to web/dist (served by the API in prod)
+```
+
 Everything runs on CPU with **no GPU and no cloud credentials**. GPU acceleration and
 the cloud integrations switch on via environment flags (`USE_GPU`, `USE_BIGQUERY`,
 `USE_GEMINI`); see [.env.example](.env.example).
@@ -110,8 +119,9 @@ Colab/Kaggle T4, then committing the updated `results.json`.
 | Layer | Tooling | What it covers |
 | ----- | ------- | -------------- |
 | Pure core | pytest + coverage gate | generator determinism, feature correctness, risk scoring |
-| Static | mypy `--strict`, ruff | types and lint across `pipeline/` and `tests/` |
-| API / frontend | (P3 / P4) | integration tests with fakes, a11y assertions |
+| Static | mypy `--strict`, ruff | types and lint across `pipeline/`, `server/`, `tests/` |
+| API | pytest + httpx TestClient | endpoint integration against a fake repository |
+| Frontend | Vitest + Testing Library + axe-core | component rendering, interaction, a11y |
 
 ## Rubric-to-repo map
 
@@ -121,8 +131,8 @@ How this submission satisfies Problem Statement 2:
 | ----------------- | -------------- | ------ |
 | Clear real-world user & problem | [Who uses this](#who-uses-this-and-what-decision-does-it-accelerate) | ✅ |
 | Specific data-dependent decision | daily peak / risk / action decision | ✅ |
-| Pipeline: ingest → clean → analyze → model → visualize | `pipeline/` → `server/` → `web/` | 🚧 |
-| Useful output (forecast / risk / alert / ranking / recommendation) | `pipeline/risk.py`, dashboard | 🚧 |
+| Pipeline: ingest → clean → analyze → model → visualize | `pipeline/` → `server/` → `web/` | ✅ |
+| Useful output (forecast / risk / alert / ranking / recommendation) | `pipeline/risk.py`, API + dashboard | ✅ |
 | Evidence acceleration improves the experience | `pipeline/benchmark.py`, [table](#acceleration-evidence) | 🚧 |
 | ≥1 Google Cloud service | BigQuery, Cloud Storage, Cloud Run, Vertex AI | 🚧 |
 | ≥1 NVIDIA acceleration tech | `cudf.pandas`, `cuML`, GPU on GCP | 🚧 |
