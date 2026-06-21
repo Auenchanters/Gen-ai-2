@@ -1,0 +1,9 @@
+[
+  {
+    "engine": "cpu",
+    "rows": 23040000,
+    "zones": 8,
+    "pipeline_seconds": 1.363,
+    "rows_per_sec": 16907972
+  }
+]

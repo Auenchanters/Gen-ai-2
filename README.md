@@ -43,7 +43,7 @@ narration) · natural-language **Q&A** over the results.
 
 ## Architecture
 
-```
+```text
  Synthetic generator OR real dataset (London Smart Meters / ASHRAE)
         │  parquet
         ▼
@@ -76,9 +76,12 @@ Google Cloud.
 ## Quickstart
 
 ```bash
-uv sync --extra dev                     # Python 3.11 env + deps
-uv run python -m pipeline.generate_data --days 7 --meters-per-zone 200   # writes data/
-uv run pytest                           # tests + coverage gate
+uv sync --extra dev                                                # Python 3.11 env + deps
+uv run python -m pipeline.generate_data --days 14 --meters-per-zone 300  # -> data/*.parquet
+uv run python -m pipeline.accelerate                               # -> data/zone_features.parquet
+uv run python -m pipeline.train                                    # -> data/forecast.parquet
+uv run python -m pipeline.benchmark --meters-per-zone 500 --days 14  # CPU baseline
+uv run pytest                                                      # tests + coverage gate
 ```
 
 Everything runs on CPU with **no GPU and no cloud credentials**. GPU acceleration and
@@ -87,12 +90,19 @@ the cloud integrations switch on via environment flags (`USE_GPU`, `USE_BIGQUERY
 
 ## Acceleration evidence
 
-The CPU-vs-GPU benchmark (`pipeline/benchmark.py`, lands in P2) records wall-time,
-rows/sec, and speedup across data scales into `benchmarks/results.json`.
+[pipeline/benchmark.py](pipeline/benchmark.py) times the heavy pipeline (zone aggregation
+and feature engineering) on the **same code** across CPU pandas and GPU `cudf.pandas`, and
+records wall-time, rows/sec, and speedup into
+[benchmarks/results.json](benchmarks/results.json). Full instructions, incl. a one-cell
+Colab notebook: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
 | Rows | CPU pandas | GPU cudf.pandas | Speedup |
 | ---- | ---------- | --------------- | ------- |
-| _to be filled by `benchmark.py`_ | | | |
+| 23,040,000 | 1.36 s | run `--compare` on a GPU | pairs automatically |
+
+CPU baseline measured locally. The GPU column is filled by running
+`python -m pipeline.benchmark --compare --meters-per-zone 2000 --days 30` on a free
+Colab/Kaggle T4, then committing the updated `results.json`.
 
 ## Testing
 

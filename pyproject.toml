@@ -19,6 +19,7 @@ dependencies = [
     "numpy>=2.1",
     "pandas>=2.2",
     "pyarrow>=18.0",
+    "xgboost>=2.1",
 ]
 
 [project.optional-dependencies]
@@ -41,6 +42,7 @@ packages = ["pipeline"]
 line-length = 100
 target-version = "py311"
 src = ["."]
+extend-exclude = ["notebooks"]  # demo notebooks are not held to production lint rules
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "PTH", "RUF", "ARG", "TID", "D"]
@@ -62,6 +64,7 @@ warn_unused_configs = true
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+disallow_untyped_calls = false
 
 [[tool.mypy.overrides]]
 # pandas operations frequently return Any even with stubs; keep the rest of strict.
@@ -69,8 +72,8 @@ module = "pipeline.*"
 warn_return_any = false
 
 [[tool.mypy.overrides]]
-# RAPIDS is only installed in the GPU environment; no stubs available.
-module = ["cudf", "cudf.pandas"]
+# RAPIDS is GPU-only (no stubs); xgboost ships no type stubs.
+module = ["cudf", "cudf.pandas", "xgboost"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

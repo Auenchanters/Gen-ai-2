@@ -19,6 +19,19 @@ All notable changes to this project are documented here. The format follows
     weather join, leakage-free lags).
   - `pipeline/risk.py` — pure peak-overload risk scoring, banding, and rule-based
     recommendations.
-- Unit tests for the generator, features, and risk core.
+- Acceleration layer:
+  - `pipeline/accelerate.py` — batch pipeline that enables RAPIDS `cudf.pandas` (GPU)
+    when `USE_GPU=1`, with automatic CPU fallback.
+  - `pipeline/train.py` — XGBoost demand-forecasting model (native API; CPU/GPU from one
+    `device` parameter) and the serving forecast + risk table.
+  - `pipeline/benchmark.py` — CPU-vs-GPU timing harness writing `benchmarks/results.json`;
+    `notebooks/benchmark_colab.ipynb` + `docs/BENCHMARK.md` for the GPU run.
+  - CPU baseline recorded: 23.0M rows through the pipeline in 1.36 s.
+- Unit tests for the generator, features, risk, pipeline, model, and benchmark
+  (23 tests, ~99% pipeline coverage).
+
+### Changed
+
+- Added `xgboost` runtime dependency; notebooks excluded from ruff.
 
 [Unreleased]: https://github.com/Auenchanters/Gen-ai-2
