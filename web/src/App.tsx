@@ -29,26 +29,28 @@ export default function App() {
         Skip to content
       </a>
       <header className="app-header">
-        <div className="brand">
-          <span className="brand-logo" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
-            </svg>
-          </span>
-          <div>
-            <h1 className="brand-name">GridPulse</h1>
-            <p className="brand-tag">Accelerated energy demand &amp; peak-risk intelligence</p>
+        <div className="app-header-inner">
+          <div className="brand">
+            <span className="brand-logo" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+              </svg>
+            </span>
+            <div>
+              <h1 className="brand-name">GridPulse</h1>
+              <p className="brand-tag">Accelerated energy demand &amp; peak-risk intelligence</p>
+            </div>
           </div>
-        </div>
-        <div className="status-pills">
-          <span className={`pill ${health?.engine.bigquery ? "on" : ""}`}>
-            <span className="pill-dot" aria-hidden="true" />
-            BigQuery {health?.engine.bigquery ? "on" : "off"}
-          </span>
-          <span className={`pill ${health?.engine.gemini ? "on" : ""}`}>
-            <span className="pill-dot" aria-hidden="true" />
-            Gemini {health?.engine.gemini ? "on" : "off"}
-          </span>
+          <div className="status-pills">
+            <span className={`pill ${health?.engine.bigquery ? "on" : ""}`}>
+              <span className="pill-dot" aria-hidden="true" />
+              BigQuery {health?.engine.bigquery ? "on" : "off"}
+            </span>
+            <span className={`pill ${health?.engine.gemini ? "on" : ""}`}>
+              <span className="pill-dot" aria-hidden="true" />
+              Gemini {health?.engine.gemini ? "on" : "off"}
+            </span>
+          </div>
         </div>
       </header>
 

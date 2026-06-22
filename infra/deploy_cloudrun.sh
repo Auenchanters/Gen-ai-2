@@ -52,6 +52,7 @@ gcloud run deploy "${SERVICE}" \
   --service-account "${SA}" \
   --allow-unauthenticated \
   --memory 1Gi \
+  --cpu-boost \
   --set-env-vars "USE_BIGQUERY=1,USE_GEMINI=1,GOOGLE_CLOUD_PROJECT=${PROJECT},GOOGLE_CLOUD_LOCATION=${REGION},BIGQUERY_DATASET=${DATASET},GEMINI_MODEL=gemini-2.5-flash"
 
 echo ">> Service URL:"

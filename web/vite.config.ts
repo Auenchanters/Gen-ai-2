@@ -6,7 +6,19 @@ export default defineConfig({
   server: {
     proxy: { "/api": "http://localhost:8080" },
   },
-  build: { outDir: "dist" },
+  build: {
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        // Split the heavy chart/React vendors into a cached chunk so the main
+        // bundle is small and repeat loads hit cache.
+        manualChunks: {
+          react: ["react", "react-dom"],
+          charts: ["recharts"],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: "jsdom",
