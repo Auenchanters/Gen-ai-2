@@ -26,11 +26,23 @@ gcloud services enable \
   run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com \
   aiplatform.googleapis.com bigquery.googleapis.com
 
-echo ">> Least-privilege service account + roles (idempotent)"
+echo ">> Runtime service account + roles (idempotent)"
 gcloud iam service-accounts create "${SA_NAME}" --display-name="GridPulse Cloud Run" 2>/dev/null || true
 for ROLE in roles/bigquery.dataViewer roles/bigquery.jobUser roles/aiplatform.user; do
   gcloud projects add-iam-policy-binding "${PROJECT}" \
     --member="serviceAccount:${SA}" --role="${ROLE}" --condition=None >/dev/null
+done
+
+echo ">> Granting the build (default compute) service account build permissions"
+# New projects ship the default compute SA with no roles, so Cloud Build (used by
+# `run deploy --source`) can't read the source bucket or push the image. Grant the
+# minimum needed for source builds.
+PROJECT_NUMBER="$(gcloud projects describe "${PROJECT}" --format='value(projectNumber)')"
+BUILD_SA="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
+for ROLE in roles/cloudbuild.builds.builder roles/storage.objectViewer \
+            roles/artifactregistry.writer roles/logging.logWriter; do
+  gcloud projects add-iam-policy-binding "${PROJECT}" \
+    --member="serviceAccount:${BUILD_SA}" --role="${ROLE}" --condition=None >/dev/null
 done
 
 echo ">> Deploying to Cloud Run (builds the Dockerfile via Cloud Build)"
