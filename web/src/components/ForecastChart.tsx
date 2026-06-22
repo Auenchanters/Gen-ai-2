@@ -1,18 +1,23 @@
 import { useState } from "react";
 import {
+  Area,
   CartesianGrid,
+  ComposedChart,
   Legend,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import type { ZoneForecastPoint } from "../types";
+import { ChartTooltip } from "./ChartTooltip";
 import { DataTable } from "./DataTable";
+import { RiskBadge } from "./RiskBadge";
 
 type SeriesPoint = ZoneForecastPoint & { time: string };
+
+const round = (n: number) => Math.round(n).toLocaleString("en-US");
 
 export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
   const zones = Array.from(new Set(points.map((p) => p.zone))).sort();
@@ -22,58 +27,76 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
     .map((p) => ({ ...p, time: new Date(p.timestamp).toLocaleString() }));
 
   return (
-    <section aria-labelledby="forecast-heading">
-      <h2 id="forecast-heading">Demand forecast vs capacity</h2>
-      <label htmlFor="zone-select">Zone</label>
-      <select id="zone-select" value={zone} onChange={(e) => setZone(e.target.value)}>
-        {zones.map((z) => (
-          <option key={z} value={z}>
-            {z}
-          </option>
-        ))}
-      </select>
+    <section className="card col-12 reveal" aria-labelledby="forecast-heading">
+      <div className="card-head">
+        <h2 className="card-title" id="forecast-heading">
+          Demand forecast vs capacity
+        </h2>
+        <span>
+          <label htmlFor="zone-select">Zone</label>
+          <select id="zone-select" value={zone} onChange={(event) => setZone(event.target.value)}>
+            {zones.map((z) => (
+              <option key={z} value={z}>
+                {z}
+              </option>
+            ))}
+          </select>
+        </span>
+      </div>
       <div
+        className="chart-wrap"
         role="img"
         aria-label={`Line chart of forecast demand versus capacity for ${zone}. The same data is in the table below.`}
       >
         <ResponsiveContainer width="100%" height={260}>
-          <LineChart data={series} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" />
+          <ComposedChart data={series} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
+            <defs>
+              <linearGradient id="fc-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.35} />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
             <XAxis dataKey="time" hide />
-            <YAxis />
-            <Tooltip />
+            <YAxis width={40} tickLine={false} axisLine={false} />
+            <Tooltip content={<ChartTooltip />} />
             <Legend />
-            <Line
+            <Area
               type="monotone"
               dataKey="forecast_kwh"
               name="Forecast"
-              stroke="#0969da"
-              dot={false}
+              stroke="#38bdf8"
+              strokeWidth={2}
+              fill="url(#fc-fill)"
               isAnimationActive={false}
             />
             <Line
               type="monotone"
               dataKey="capacity_kwh"
               name="Capacity"
-              stroke="#b91c1c"
+              stroke="#f85149"
+              strokeWidth={1.5}
+              strokeDasharray="5 4"
               dot={false}
               isAnimationActive={false}
             />
-          </LineChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <DataTable
-        caption={`Forecast points for ${zone} (first 12)`}
-        rowKey={(row) => row.timestamp}
-        rows={series.slice(0, 12)}
-        columns={[
-          { key: "time", label: "Time" },
-          { key: "forecast_kwh", label: "Forecast (kWh)" },
-          { key: "capacity_kwh", label: "Capacity (kWh)" },
-          { key: "risk_score", label: "Risk score" },
-          { key: "risk_band", label: "Band" },
-        ]}
-      />
+      <div className="table-wrap">
+        <DataTable
+          caption={`Forecast points for ${zone} (first 12)`}
+          rowKey={(row) => row.timestamp}
+          rows={series.slice(0, 12)}
+          columns={[
+            { key: "time", label: "Time" },
+            { key: "forecast_kwh", label: "Forecast", render: (r) => <span className="num">{round(r.forecast_kwh)}</span> },
+            { key: "capacity_kwh", label: "Capacity", render: (r) => <span className="num">{round(r.capacity_kwh)}</span> },
+            { key: "risk_score", label: "Risk", render: (r) => <span className="num">{round(r.risk_score)}</span> },
+            { key: "risk_band", label: "Band", render: (r) => <RiskBadge band={r.risk_band} /> },
+          ]}
+        />
+      </div>
     </section>
   );
 }

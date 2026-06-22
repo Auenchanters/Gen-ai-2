@@ -27,29 +27,39 @@ export function AskBox() {
   }
 
   return (
-    <section aria-labelledby="ask-heading">
-      <h2 id="ask-heading">Ask about grid risk</h2>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="question">Your question</label>
+    <section className="card col-12 reveal" aria-labelledby="ask-heading">
+      <div className="card-head">
+        <h2 className="card-title" id="ask-heading">
+          Ask about grid risk
+        </h2>
+      </div>
+      <form className="ask-form" onSubmit={onSubmit}>
+        <label className="ask-label" htmlFor="question">
+          Your question
+        </label>
         <textarea
           id="question"
           value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          onChange={(event) => setQuestion(event.target.value)}
           aria-describedby="question-hint"
           rows={2}
           maxLength={500}
+          placeholder="e.g. Which zones are at risk this evening, and what should I do?"
         />
-        <p id="question-hint">Example: which zones are at risk this evening?</p>
-        <button type="submit" disabled={loading} aria-busy={loading}>
+        <p className="hint" id="question-hint">
+          Answered from the live forecast — by Gemini when enabled, else deterministic rules.
+        </p>
+        <button className="btn" type="submit" disabled={loading} aria-busy={loading}>
           {loading ? "Asking…" : "Ask"}
         </button>
       </form>
       <div role="status" aria-live="polite">
         {error && <p className="error">{error}</p>}
         {response && (
-          <p>
-            {response.answer} <span className="source">[source: {response.source}]</span>
-          </p>
+          <div className="answer">
+            <p>{response.answer}</p>
+            <span className="source">source: {response.source}</span>
+          </div>
         )}
       </div>
     </section>
