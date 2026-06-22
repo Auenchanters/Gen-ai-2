@@ -11,37 +11,35 @@
    GridPulse — design tokens
    ========================================================================== */
 :root {
-  /* Warm-tinted slate, lifted off pure black (skill: avoid #000). */
-  --bg-0: #0c0f16;
-  --bg-1: #11151f;
-  --surface: rgba(255, 255, 255, 0.036);
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --surface-hover: rgba(255, 255, 255, 0.07);
-  --border: rgba(255, 255, 255, 0.085);
-  --border-strong: rgba(255, 255, 255, 0.15);
+  /* Deep neutral slate — restrained, no warm tint. */
+  --bg-0: #0a0c11;
+  --bg-1: #0d1017;
+  --surface: rgba(255, 255, 255, 0.022);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.045);
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.13);
 
-  --text: #eef1f6;
-  --text-muted: #9aa6b8;
-  --text-dim: #6b7689;
+  --text: #e7eaf0;
+  --text-muted: #939cad;
+  --text-dim: #626b7b;
 
-  /* Energy amber — brand/interactive only (buttons, links, focus, logo).
-     Never used to encode data; risk meaning stays on the band colors below. */
-  --accent: #ffb454;
-  --accent-2: #ffc266;
-  --accent-ink: #1a1206;
-  --grad: linear-gradient(135deg, #ffb454 0%, #ff9f3e 100%);
-  --grad-soft: linear-gradient(135deg, rgba(255, 180, 84, 0.16), rgba(255, 159, 62, 0.07));
+  /* One restrained cool accent — links, focus, primary action, the demand line.
+     Never encodes risk; risk meaning stays on the band colors below. */
+  --accent: #6d8bff;
+  --accent-2: #88a0ff;
+  --accent-ink: #0a0e1a;
 
   --low: #3fb950;
   --medium: #d6a01e;
   --high: #fb8f44;
   --critical: #f85149;
 
-  --radius: 16px;
-  --radius-sm: 10px;
-  /* Warm-tinted shadow, not pure black. */
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 14px 36px -16px rgba(8, 6, 2, 0.72);
-  --ring: 0 0 0 3px rgba(255, 180, 84, 0.45);
+  --radius: 14px;
+  --radius-sm: 9px;
+  /* Soft, low shadow — depth comes from hairline borders, not glow. */
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --ring: 0 0 0 3px rgba(109, 139, 255, 0.4);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --display: "Space Grotesk", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
@@ -62,31 +60,13 @@ body {
   font-family: var(--font);
   color: var(--text);
   background-color: var(--bg-0);
-  /* Subtle warm vignette instead of the cyan/blue AI mesh; faint grain on top. */
-  background-image:
-    radial-gradient(1100px 600px at 84% -12%, rgba(255, 180, 84, 0.07), transparent 58%),
-    radial-gradient(900px 560px at 8% -8%, rgba(120, 140, 170, 0.06), transparent 55%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-0) 62%);
+  /* Quiet cool wash at the top, then flat — restrained, no mesh, no grain. */
+  background-image: linear-gradient(180deg, var(--bg-1), var(--bg-0) 240px);
+  background-repeat: no-repeat;
   background-attachment: fixed;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-/* Tiles a tiny SVG noise texture so flat surfaces aren't dead-flat (skill: add texture). */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-#root {
-  position: relative;
-  z-index: 1;
 }
 
 h1,
@@ -120,7 +100,7 @@ a {
   left: -999px;
   top: 0;
   z-index: 20;
-  background: var(--grad);
+  background: var(--accent);
   color: var(--accent-ink);
   font-weight: 700;
   padding: 0.5rem 1rem;
@@ -134,10 +114,10 @@ a {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 0.7rem 1.5rem;
-  background: rgba(12, 15, 22, 0.78);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.6rem 1.5rem;
+  background: rgba(10, 12, 17, 0.82);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 /* Inner row aligns with the content column below — no stranded edges. */
 .app-header-inner {
@@ -156,14 +136,14 @@ a {
   gap: 0.7rem;
 }
 .brand-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
   display: grid;
   place-items: center;
-  background: var(--grad);
-  box-shadow: 0 6px 18px -6px rgba(255, 159, 62, 0.6);
-  color: var(--accent-ink);
+  background: rgba(109, 139, 255, 0.13);
+  border: 1px solid rgba(109, 139, 255, 0.26);
+  color: var(--accent);
   flex: none;
 }
 .brand-name {
@@ -212,29 +192,28 @@ a {
    Layout
    ========================================================================== */
 .layout {
-  max-width: 1180px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 1.6rem 1.5rem 2rem;
+  padding: 2.2rem 1.5rem 3rem;
   display: grid;
-  gap: 1.1rem;
+  gap: 1.5rem;
 }
 
 .dash {
   display: grid;
-  gap: 1.1rem;
+  gap: 1.5rem;
 }
 
-/* Asymmetric: first metric leads, three support it (skill: break the 4-equal row). */
 .kpis {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
-  gap: 1.1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 1.1rem;
+  gap: 1.5rem;
 }
 .col-12 {
   grid-column: span 12;
@@ -247,11 +226,9 @@ a {
 }
 
 @media (max-width: 880px) {
-  .kpis {
+  .kpis,
+  .sk-kpis {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .stat-hero {
-    grid-column: span 2;
   }
   .col-7,
   .col-5 {
@@ -262,9 +239,6 @@ a {
 @media (max-width: 520px) {
   .kpis {
     grid-template-columns: 1fr;
-  }
-  .stat-hero {
-    grid-column: span 1;
   }
 }
 
@@ -277,94 +251,67 @@ a {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1.2rem 1.3rem;
+  padding: 1.4rem 1.5rem;
   overflow: hidden;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
+  transition: border-color 0.18s ease;
 }
 .card:hover {
   border-color: var(--border-strong);
-  box-shadow: var(--shadow), 0 0 0 1px rgba(255, 180, 84, 0.08);
 }
 .card-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 1rem;
 }
 .card-title {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
 }
 .card-meta {
   font-size: 0.78rem;
   color: var(--text-dim);
 }
 
-/* KPI stat cards */
+/* KPI stat cards — flat, hairline, generous whitespace. */
 .stat {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0.55rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 0.95rem 1.1rem;
-  gap: 0.3rem;
+  padding: 1.25rem 1.3rem;
   overflow: hidden;
-  transition:
-    border-color 0.18s ease,
-    transform 0.18s ease;
+  transition: border-color 0.18s ease;
 }
 .stat:hover {
   border-color: var(--border-strong);
-  transform: translateY(-2px);
-}
-.stat::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--grad);
-  opacity: 0.9;
-}
-/* Hero metric: brighter surface, spotlight border, larger figure. */
-.stat-hero {
-  background:
-    radial-gradient(120% 140% at 0% 0%, rgba(255, 180, 84, 0.08), transparent 60%),
-    var(--surface-2);
-  border-color: rgba(255, 180, 84, 0.22);
-}
-.stat-hero::before {
-  width: 4px;
-}
-.stat-hero .stat-value {
-  font-size: 2.3rem;
 }
 .stat-label {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  letter-spacing: 0.09em;
+  color: var(--text-dim);
 }
 .stat-value {
   font-family: var(--display);
   margin: 0;
-  font-size: 1.95rem;
-  font-weight: 600;
+  font-size: 2.1rem;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  color: var(--text);
 }
 .stat-sub {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 /* ============================================================================
@@ -579,24 +526,22 @@ textarea::placeholder {
   align-items: center;
   gap: 0.5rem;
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent-ink);
-  background: var(--grad);
+  background: var(--accent);
   border: none;
   border-radius: var(--radius-sm);
   padding: 0.6rem 1.1rem;
   cursor: pointer;
   transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease,
-    filter 0.12s ease;
+    background 0.14s ease,
+    filter 0.14s ease;
 }
 .btn:hover:not([disabled]) {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px -10px rgba(255, 159, 62, 0.6);
+  background: var(--accent-2);
 }
 .btn:active:not([disabled]) {
-  transform: translateY(0);
+  filter: brightness(0.95);
 }
 .btn[disabled] {
   filter: grayscale(0.4) brightness(0.85);
@@ -605,10 +550,10 @@ textarea::placeholder {
 .answer {
   margin-top: 0.9rem;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  background: var(--grad-soft);
+  border-left: 2px solid var(--accent);
+  background: var(--surface);
   border-radius: var(--radius-sm);
-  padding: 0.8rem 0.95rem;
+  padding: 0.85rem 1rem;
 }
 .answer p {
   margin: 0;
@@ -702,11 +647,11 @@ select {
 }
 .sk-kpis {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
-  gap: 1.1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 .sk-kpis .sk-block {
-  height: 104px;
+  height: 112px;
 }
 .sk-wide {
   height: 300px;

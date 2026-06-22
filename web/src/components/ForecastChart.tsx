@@ -52,8 +52,8 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
           <ComposedChart data={series} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
             <defs>
               <linearGradient id="fc-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ffb454" stopOpacity={0.32} />
-                <stop offset="100%" stopColor="#ffb454" stopOpacity={0} />
+                <stop offset="0%" stopColor="#6d8bff" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="#6d8bff" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
@@ -65,7 +65,7 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
               type="monotone"
               dataKey="forecast_kwh"
               name="Forecast"
-              stroke="#ffb454"
+              stroke="#6d8bff"
               strokeWidth={2}
               fill="url(#fc-fill)"
               isAnimationActive={false}
