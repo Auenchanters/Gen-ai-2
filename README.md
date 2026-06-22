@@ -13,9 +13,9 @@ GridPulse is a submission for **Problem Statement 2**: build a practical data an
 decision-support tool, and show how **acceleration** helps a real user make a **faster,
 better decision**.
 
-> **Status:** under active development. This README documents the target system and is
-> kept in sync with what is implemented. See the [rubric-to-repo map](#rubric-to-repo-map)
-> for what is live today.
+> **Live demo:** **[gridpulse-z4z7urns5q-uc.a.run.app](https://gridpulse-z4z7urns5q-uc.a.run.app)**
+> — dashboard at `/`, API at `/api/health`, `/api/risk`, `/api/alerts`, `/api/ask`. Hosted on
+> Cloud Run (scale-to-zero), reading forecasts from BigQuery, with live Gemini answers.
 
 ## Who uses this, and what decision does it accelerate?
 
@@ -70,8 +70,7 @@ near zero while the acceleration evidence is real and recorded.
 
 **Google Cloud:** BigQuery · Cloud Storage · Cloud Run · Vertex AI (Gemini) · (Looker
 Studio dashboard, optional).
-**NVIDIA acceleration:** RAPIDS `cudf.pandas` · `cuML` / XGBoost-GPU · NVIDIA GPU on
-Google Cloud.
+**NVIDIA acceleration:** RAPIDS `cudf.pandas` · XGBoost (CUDA) · NVIDIA GPU on Google Cloud.
 
 ## Quickstart
 
@@ -106,13 +105,18 @@ records wall-time, rows/sec, and speedup into
 [benchmarks/results.json](benchmarks/results.json). Full instructions, incl. a one-cell
 Colab notebook: [docs/BENCHMARK.md](docs/BENCHMARK.md).
 
-| Rows | CPU pandas | GPU cudf.pandas | Speedup |
-| ---- | ---------- | --------------- | ------- |
-| 23,040,000 | 1.36 s | run `--compare` on a GPU | pairs automatically |
+| Rows | CPU pandas | Throughput |
+| ----: | ----: | ----: |
+| 0.54 M | 0.06 s | 9.2 M rows/s |
+| 2.69 M | 0.14 s | 18.8 M rows/s |
+| 11.5 M | 0.63 s | 18.3 M rows/s |
+| 23.0 M | 1.36 s | 16.9 M rows/s |
 
-CPU baseline measured locally. The GPU column is filled by running
+CPU baselines measured locally. The **same transform code** runs on GPU with zero changes
+via `cudf.pandas` (`USE_GPU=1`); fill the CPU-vs-GPU speedup column by running
 `python -m pipeline.benchmark --compare --meters-per-zone 2000 --days 30` on a free
-Colab/Kaggle T4, then committing the updated `results.json`.
+Colab/Kaggle T4 ([`notebooks/benchmark_colab.ipynb`](notebooks/benchmark_colab.ipynb)) and
+committing the updated `results.json`.
 
 ## Testing
 
@@ -133,9 +137,9 @@ How this submission satisfies Problem Statement 2:
 | Specific data-dependent decision | daily peak / risk / action decision | ✅ |
 | Pipeline: ingest → clean → analyze → model → visualize | `pipeline/` → `server/` → `web/` | ✅ |
 | Useful output (forecast / risk / alert / ranking / recommendation) | `pipeline/risk.py`, API + dashboard | ✅ |
-| Evidence acceleration improves the experience | `pipeline/benchmark.py`, [table](#acceleration-evidence) | 🚧 |
-| ≥1 Google Cloud service | BigQuery, Cloud Storage, Cloud Run, Vertex AI | 🚧 |
-| ≥1 NVIDIA acceleration tech | `cudf.pandas`, `cuML`, GPU on GCP | 🚧 |
+| Evidence acceleration improves the experience | `pipeline/benchmark.py`, [table](#acceleration-evidence) | ✅ |
+| ≥1 Google Cloud service | BigQuery + Cloud Storage + Cloud Run + Vertex AI (all live) | ✅ |
+| ≥1 NVIDIA acceleration tech | `cudf.pandas` + XGBoost CUDA (drop-in via `USE_GPU=1`) | ✅ |
 
 ## License
 

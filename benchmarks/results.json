@@ -5,5 +5,26 @@
     "zones": 8,
     "pipeline_seconds": 1.363,
     "rows_per_sec": 16907972
+  },
+  {
+    "engine": "cpu",
+    "rows": 537600,
+    "zones": 8,
+    "pipeline_seconds": 0.058,
+    "rows_per_sec": 9199414
+  },
+  {
+    "engine": "cpu",
+    "rows": 2688000,
+    "zones": 8,
+    "pipeline_seconds": 0.143,
+    "rows_per_sec": 18794968
+  },
+  {
+    "engine": "cpu",
+    "rows": 11520000,
+    "zones": 8,
+    "pipeline_seconds": 0.629,
+    "rows_per_sec": 18317942
   }
 ]

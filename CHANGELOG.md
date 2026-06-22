@@ -41,6 +41,15 @@ All notable changes to this project are documented here. The format follows
 - Unit + integration tests across pipeline, server, and web (49 tests: 44 backend +
   5 frontend, with Vitest + axe-core a11y assertions).
 
+- Cloud delivery (`infra/`, `Dockerfile`):
+  - Multi-stage Dockerfile (build the SPA, then serve API + SPA from one non-root
+    container) deployed to **Cloud Run**.
+  - `infra/deploy.sh` / `infra/deploy_cloudrun.sh`: idempotent deploy — enable APIs,
+    create a least-privilege runtime service account, load the forecast into
+    **BigQuery** and raw data into **Cloud Storage**, and deploy.
+  - `infra/load_bigquery.py`: load BigQuery via the Python client.
+  - `docs/ARCHITECTURE.md` and `infra/IAM.md`.
+
 ### Changed
 
 - Added `xgboost`, `fastapi`, `uvicorn`, `pydantic`, `pydantic-settings` dependencies and
