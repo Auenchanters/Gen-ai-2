@@ -3,6 +3,9 @@
 # Idempotent — safe to re-run. Requires: gcloud, bq, and `uv` for local data generation.
 set -euo pipefail
 
+# Run non-interactively (auto-confirm Artifact Registry repo creation, etc.).
+export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 PROJECT="${PROJECT:-gen-ai-2-500107}"
 REGION="${REGION:-us-central1}"
 SERVICE="${SERVICE:-gridpulse}"
@@ -10,7 +13,7 @@ DATASET="${DATASET:-gridpulse}"
 BUCKET="gs://${PROJECT}-gridpulse"
 SA_NAME="gridpulse-run"
 SA="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
-PYTHON_CMD="${PYTHON_CMD:-uv run python}"
+PYTHON_CMD="${PYTHON_CMD:-uv run --extra cloud python}"
 
 echo ">> Using project ${PROJECT} (region ${REGION})"
 gcloud config set project "${PROJECT}"
@@ -23,9 +26,6 @@ gcloud services enable \
 echo ">> Creating GCS bucket (idempotent)"
 gcloud storage buckets create "${BUCKET}" --location="${REGION}" 2>/dev/null || true
 
-echo ">> Creating BigQuery dataset (idempotent)"
-bq --location="${REGION}" mk --dataset "${PROJECT}:${DATASET}" 2>/dev/null || true
-
 echo ">> Generating data + forecast locally (GPU auto-used if available)"
 ${PYTHON_CMD} -m pipeline.generate_data --days 14 --meters-per-zone 80
 ${PYTHON_CMD} -m pipeline.accelerate
@@ -34,8 +34,8 @@ ${PYTHON_CMD} -m pipeline.train
 echo ">> Uploading raw data to Cloud Storage"
 gcloud storage cp data/readings.parquet data/weather.parquet "${BUCKET}/raw/"
 
-echo ">> Loading forecast into BigQuery"
-bq load --replace --source_format=PARQUET "${DATASET}.forecast" data/forecast.parquet
+echo ">> Loading forecast into BigQuery (Python client; creates the dataset if needed)"
+${PYTHON_CMD} infra/load_bigquery.py --project "${PROJECT}" --dataset "${DATASET}" --location "${REGION}"
 
 echo ">> Creating least-privilege service account (idempotent)"
 gcloud iam service-accounts create "${SA_NAME}" \
