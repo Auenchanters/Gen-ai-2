@@ -2,22 +2,26 @@
    GridPulse — design tokens
    ========================================================================== */
 :root {
-  --bg-0: #060912;
-  --bg-1: #0a0f1d;
-  --surface: rgba(255, 255, 255, 0.038);
+  /* Warm-tinted slate, lifted off pure black (skill: avoid #000). */
+  --bg-0: #0c0f16;
+  --bg-1: #11151f;
+  --surface: rgba(255, 255, 255, 0.036);
   --surface-2: rgba(255, 255, 255, 0.06);
   --surface-hover: rgba(255, 255, 255, 0.07);
-  --border: rgba(255, 255, 255, 0.09);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.085);
+  --border-strong: rgba(255, 255, 255, 0.15);
 
-  --text: #e7edf5;
-  --text-muted: #97a4ba;
-  --text-dim: #66738c;
+  --text: #eef1f6;
+  --text-muted: #9aa6b8;
+  --text-dim: #6b7689;
 
-  --accent: #38bdf8;
-  --accent-2: #22d3ee;
-  --grad: linear-gradient(135deg, #3b82f6 0%, #22d3ee 100%);
-  --grad-soft: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(34, 211, 238, 0.12));
+  /* Energy amber — brand/interactive only (buttons, links, focus, logo).
+     Never used to encode data; risk meaning stays on the band colors below. */
+  --accent: #ffb454;
+  --accent-2: #ffc266;
+  --accent-ink: #1a1206;
+  --grad: linear-gradient(135deg, #ffb454 0%, #ff9f3e 100%);
+  --grad-soft: linear-gradient(135deg, rgba(255, 180, 84, 0.16), rgba(255, 159, 62, 0.07));
 
   --low: #3fb950;
   --medium: #d6a01e;
@@ -26,9 +30,11 @@
 
   --radius: 16px;
   --radius-sm: 10px;
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 12px 32px -12px rgba(0, 0, 0, 0.6);
-  --ring: 0 0 0 3px rgba(56, 189, 248, 0.45);
-  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Warm-tinted shadow, not pure black. */
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 14px 36px -16px rgba(8, 6, 2, 0.72);
+  --ring: 0 0 0 3px rgba(255, 180, 84, 0.45);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --display: "Space Grotesk", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
   color-scheme: dark;
 }
@@ -47,21 +53,40 @@ body {
   font-family: var(--font);
   color: var(--text);
   background-color: var(--bg-0);
+  /* Subtle warm vignette instead of the cyan/blue AI mesh; faint grain on top. */
   background-image:
-    radial-gradient(900px 500px at 78% -8%, rgba(34, 211, 238, 0.14), transparent 60%),
-    radial-gradient(1000px 560px at 12% -12%, rgba(59, 130, 246, 0.16), transparent 55%),
-    linear-gradient(180deg, var(--bg-1), var(--bg-0) 60%);
+    radial-gradient(1100px 600px at 84% -12%, rgba(255, 180, 84, 0.07), transparent 58%),
+    radial-gradient(900px 560px at 8% -8%, rgba(120, 140, 170, 0.06), transparent 55%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0) 62%);
   background-attachment: fixed;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* Tiles a tiny SVG noise texture so flat surfaces aren't dead-flat (skill: add texture). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
 h1,
 h2,
 h3 {
+  font-family: var(--display);
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.18;
+  text-wrap: balance;
 }
 
 a {
@@ -87,7 +112,7 @@ a {
   top: 0;
   z-index: 20;
   background: var(--grad);
-  color: #04121f;
+  color: var(--accent-ink);
   font-weight: 700;
   padding: 0.5rem 1rem;
   border-radius: 0 0 10px 0;
@@ -123,14 +148,15 @@ a {
   display: grid;
   place-items: center;
   background: var(--grad);
-  box-shadow: 0 6px 18px -6px rgba(34, 211, 238, 0.7);
-  color: #04121f;
+  box-shadow: 0 6px 18px -6px rgba(255, 159, 62, 0.6);
+  color: var(--accent-ink);
   flex: none;
 }
 .brand-name {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 .brand-tag {
   margin: 0;
@@ -181,9 +207,10 @@ a {
   gap: 1.1rem;
 }
 
+/* Asymmetric: first metric leads, three support it (skill: break the 4-equal row). */
 .kpis {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: 1.1rem;
 }
 
@@ -206,9 +233,21 @@ a {
   .kpis {
     grid-template-columns: repeat(2, 1fr);
   }
+  .stat-hero {
+    grid-column: span 2;
+  }
   .col-7,
   .col-5 {
     grid-column: span 12;
+  }
+}
+
+@media (max-width: 520px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+  .stat-hero {
+    grid-column: span 1;
   }
 }
 
@@ -223,6 +262,14 @@ a {
   box-shadow: var(--shadow);
   padding: 1.2rem 1.3rem;
   overflow: hidden;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(255, 180, 84, 0.08);
 }
 .card-head {
   display: flex;
@@ -243,12 +290,22 @@ a {
 /* KPI stat cards */
 .stat {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1.05rem 1.15rem;
   overflow: hidden;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+.stat:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
 }
 .stat::before {
   content: "";
@@ -258,6 +315,19 @@ a {
   background: var(--grad);
   opacity: 0.9;
 }
+/* Hero metric: brighter surface, spotlight border, larger figure. */
+.stat-hero {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(255, 180, 84, 0.08), transparent 60%),
+    var(--surface-2);
+  border-color: rgba(255, 180, 84, 0.22);
+}
+.stat-hero::before {
+  width: 4px;
+}
+.stat-hero .stat-value {
+  font-size: 2.7rem;
+}
 .stat-label {
   margin: 0;
   font-size: 0.72rem;
@@ -266,10 +336,12 @@ a {
   color: var(--text-muted);
 }
 .stat-value {
+  font-family: var(--display);
   margin: 0.35rem 0 0.1rem;
   font-size: 1.95rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
+  letter-spacing: -0.01em;
 }
 .stat-sub {
   margin: 0;
@@ -490,7 +562,7 @@ textarea::placeholder {
   gap: 0.5rem;
   font: inherit;
   font-weight: 700;
-  color: #04121f;
+  color: var(--accent-ink);
   background: var(--grad);
   border: none;
   border-radius: var(--radius-sm);
@@ -503,7 +575,10 @@ textarea::placeholder {
 }
 .btn:hover:not([disabled]) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px -10px rgba(34, 211, 238, 0.7);
+  box-shadow: 0 10px 24px -10px rgba(255, 159, 62, 0.6);
+}
+.btn:active:not([disabled]) {
+  transform: translateY(0);
 }
 .btn[disabled] {
   filter: grayscale(0.4) brightness(0.85);
@@ -519,6 +594,8 @@ textarea::placeholder {
 }
 .answer p {
   margin: 0;
+  max-width: 65ch;
+  text-wrap: pretty;
 }
 .source {
   display: inline-block;
@@ -577,6 +654,61 @@ select {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
+   Skeleton (shimmer placeholder while the dashboard loads)
+   ========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skeleton {
+  display: grid;
+  gap: 1.1rem;
+}
+.sk-block {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.sk-kpis {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 1.1rem;
+}
+.sk-kpis .sk-block {
+  height: 104px;
+}
+.sk-wide {
+  height: 300px;
+}
+.sk-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (max-width: 880px) {
+  .sk-kpis {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

@@ -54,10 +54,17 @@ export default function App() {
 
       <main id="main" className="layout">
         {loading && (
-          <p className="loading" role="status" aria-live="polite">
-            <span className="spinner" aria-hidden="true" />
-            Loading dashboard…
-          </p>
+          <div className="skeleton" role="status" aria-live="polite">
+            <span className="sr-only">Loading dashboard…</span>
+            <div className="sk-kpis" aria-hidden="true">
+              <div className="sk-block" />
+              <div className="sk-block" />
+              <div className="sk-block" />
+              <div className="sk-block" />
+            </div>
+            <div className="sk-block sk-wide" aria-hidden="true" />
+            <div className="sk-block sk-wide" aria-hidden="true" />
+          </div>
         )}
         {error && (
           <p className="alert-banner error" role="alert">
