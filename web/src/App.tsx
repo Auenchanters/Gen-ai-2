@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAlerts, getForecast, getHealth, getRisk } from "./api";
 import { Dashboard } from "./components/Dashboard";
+import { Splash } from "./components/Splash";
 import type { Alert, Health, RiskRankRow, ZoneForecastPoint } from "./types";
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     Promise.all([getHealth(), getRisk(), getForecast(), getAlerts()])
@@ -25,9 +27,12 @@ export default function App() {
 
   return (
     <>
+      {showSplash && <Splash ready={!loading} onDone={() => setShowSplash(false)} />}
+
       <a href="#main" className="skip-link">
         Skip to content
       </a>
+
       <header className="app-header">
         <div className="app-header-inner">
           <div className="brand">
@@ -55,6 +60,17 @@ export default function App() {
       </header>
 
       <main id="main" className="layout">
+        <section className="hero">
+          <p className="hero-eyebrow">Live grid telemetry</p>
+          <h1 className="hero-title">
+            Stay ahead of <span className="grad-text">peak demand</span>.
+          </h1>
+          <p className="hero-sub">
+            Accelerated forecasting and peak-risk intelligence across every zone — so operators act
+            before the grid does.
+          </p>
+        </section>
+
         {loading && (
           <div className="skeleton" role="status" aria-live="polite">
             <span className="sr-only">Loading dashboard…</span>
