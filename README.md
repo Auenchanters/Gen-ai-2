@@ -13,7 +13,7 @@ GridPulse is a submission for **Problem Statement 2**: build a practical data an
 decision-support tool, and show how **acceleration** helps a real user make a **faster,
 better decision**.
 
-> **Live demo:** **[gridpulse-z4z7urns5q-uc.a.run.app](https://gridpulse-z4z7urns5q-uc.a.run.app)**
+> **Live demo:** **[gridpulse-782555307151.us-central1.run.app](https://gridpulse-782555307151.us-central1.run.app/)**
 > — dashboard at `/`, API at `/api/health`, `/api/risk`, `/api/alerts`, `/api/ask`. Hosted on
 > Cloud Run (scale-to-zero), reading forecasts from BigQuery, with live Gemini answers.
 
