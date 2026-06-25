@@ -3,7 +3,7 @@ import { RiskBadge } from "./RiskBadge";
 
 export function Alerts({ alerts }: { alerts: Alert[] }) {
   return (
-    <section className="card col-5 reveal" aria-labelledby="alerts-heading">
+    <section className="card col-4 reveal" aria-labelledby="alerts-heading">
       <div className="card-head">
         <h2 className="card-title" id="alerts-heading">
           Active alerts

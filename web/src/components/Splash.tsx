@@ -64,8 +64,8 @@ export function Splash({ ready, onDone }: { ready: boolean; onDone: () => void }
         <svg className="splash-logo" viewBox="0 0 24 24">
           <defs>
             <linearGradient id="splashGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#ffd23f" />
-              <stop offset="100%" stopColor="#f2a900" />
+              <stop offset="0%" stopColor="#4da3ff" />
+              <stop offset="100%" stopColor="#36d6c6" />
             </linearGradient>
           </defs>
           <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />

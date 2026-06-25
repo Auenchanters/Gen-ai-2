@@ -27,12 +27,7 @@ export function AskBox() {
   }
 
   return (
-    <section className="card col-12 reveal" aria-labelledby="ask-heading">
-      <div className="card-head">
-        <h2 className="card-title" id="ask-heading">
-          Ask about grid risk
-        </h2>
-      </div>
+    <div className="ask-wrap">
       <form className="ask-form" onSubmit={onSubmit}>
         <label className="ask-label" htmlFor="question">
           Your question
@@ -62,6 +57,6 @@ export function AskBox() {
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 }

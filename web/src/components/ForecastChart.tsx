@@ -27,10 +27,10 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
     .map((p) => ({ ...p, time: new Date(p.timestamp).toLocaleString() }));
 
   return (
-    <section className="card col-12 reveal" aria-labelledby="forecast-heading">
+    <section className="card col-8 reveal" aria-labelledby="forecast-heading">
       <div className="card-head">
         <h2 className="card-title" id="forecast-heading">
-          Demand forecast vs capacity
+          City power consumption trends
         </h2>
         <span>
           <label htmlFor="zone-select">Zone</label>
@@ -52,8 +52,8 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
           <ComposedChart data={series} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
             <defs>
               <linearGradient id="fc-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ffcb05" stopOpacity={0.34} />
-                <stop offset="100%" stopColor="#ffcb05" stopOpacity={0} />
+                <stop offset="0%" stopColor="#4da3ff" stopOpacity={0.34} />
+                <stop offset="100%" stopColor="#4da3ff" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
@@ -65,7 +65,7 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
               type="monotone"
               dataKey="forecast_kwh"
               name="Forecast"
-              stroke="#ffcb05"
+              stroke="#4da3ff"
               strokeWidth={2}
               fill="url(#fc-fill)"
               isAnimationActive={false}
@@ -83,7 +83,7 @@ export function ForecastChart({ points }: { points: ZoneForecastPoint[] }) {
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <div className="table-wrap">
+      <div className="table-wrap sr-table">
         <DataTable
           caption={`Forecast points for ${zone} (first 12)`}
           rowKey={(row) => row.timestamp}

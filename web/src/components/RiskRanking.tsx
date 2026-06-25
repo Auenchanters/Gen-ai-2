@@ -9,10 +9,10 @@ const round = (n: number) => Math.round(n).toLocaleString("en-US");
 
 export function RiskRanking({ rows }: { rows: RiskRankRow[] }) {
   return (
-    <section className="card col-7 reveal" aria-labelledby="risk-heading">
+    <section className="card col-8 reveal" aria-labelledby="risk-heading">
       <div className="card-head">
         <h2 className="card-title" id="risk-heading">
-          Zone peak-risk ranking
+          Peak-risk ranking by zone
         </h2>
         <span className="card-meta">{rows.length} zones</span>
       </div>
@@ -34,7 +34,7 @@ export function RiskRanking({ rows }: { rows: RiskRankRow[] }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="table-wrap">
+      <div className="table-wrap sr-table">
         <DataTable
           caption="Zone risk ranking (highest first)"
           rowKey={(row) => row.zone}
